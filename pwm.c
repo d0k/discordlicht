@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include "gammatable.h"
 
 #define PWMFREQ 40		// 1s/100Hz/255 states == 40 us
 
@@ -11,10 +12,10 @@ int main(void)
 
 	while (1) {
 		PORTD = 0b00000011;
-		for (uint8_t i = 0; i < pulspause; i++)
+		for (uint8_t i = 0; i < gammatable[pulspause]; i++)
 			_delay_us(PWMFREQ);
 		PORTD = 0xFF;
-		for (uint8_t i = 0; i < 255 - pulspause; i++)
+		for (uint8_t i = 0; i < gammatable[255 - pulspause]; i++)
 			_delay_us(PWMFREQ);
 		if ((PIND & 0b00000001) == 0)	// PIND 0 low
 			pulspause++;	// will be optimized to a shift

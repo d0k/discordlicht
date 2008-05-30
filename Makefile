@@ -10,6 +10,8 @@ COMPILE = avr-gcc -std=gnu99 -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -mrelax 
 # symbolic targets:
 all:	pwm.hex
 
+pwm.o: gammatable.h
+
 .c.o:
 	$(COMPILE) -c $< -o $@
 
@@ -20,9 +22,12 @@ fuse:
 	$(AVRDUDE) $(FUSES)
 
 clean:
-	rm -f pwm.hex pwm.elf $(OBJECTS)
+	rm -f pwm.hex pwm.elf gammatable.h $(OBJECTS)
 
 # file targets:
+gammatable.h:
+	python gammatable.py > $@
+
 pwm.elf: $(OBJECTS)
 	$(COMPILE) -o pwm.elf $(OBJECTS)
 
