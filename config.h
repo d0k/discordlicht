@@ -1,0 +1,3 @@
+#define PWM_CHANNELS 3
+#define RC5_DECODER 0
+#define STATIC_SCRIPTS 0

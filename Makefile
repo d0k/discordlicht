@@ -1,36 +1,32 @@
 DEVICE     = atmega8
 CLOCK      = 16000000
 PROGRAMMER = -c USBasp
-OBJECTS    = pwm.o
+OBJECTS    = main.o pwm.o rc5.o static_scripts.o
 FUSES      = -U hfuse:w:0xc9:m -U lfuse:w:0x9f:m
 
 AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
-COMPILE = avr-gcc -std=gnu99 -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE) -mrelax -combine -fwhole-program
+COMPILE = avr-gcc -std=gnu99 -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)# -mrelax -combine
 
 # symbolic targets:
-all:	pwm.hex
-
-pwm.o: gammatable.h
+all:	main.hex
 
 .c.o:
 	$(COMPILE) -c $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:pwm.hex:i
+	$(AVRDUDE) -U flash:w:main.hex:i
 
 fuse:
 	$(AVRDUDE) $(FUSES)
 
 clean:
-	rm -f pwm.hex pwm.elf gammatable.h $(OBJECTS)
+	rm -f main.hex main.elf gammatable.h $(OBJECTS)
 
 # file targets:
-gammatable.h:
-	python gammatable.py > $@
 
-pwm.elf: $(OBJECTS)
-	$(COMPILE) -o pwm.elf $(OBJECTS)
+main.elf: $(OBJECTS)
+	$(COMPILE) -o main.elf $(OBJECTS)
 
-pwm.hex: pwm.elf
-	rm -f pwm.hex
-	avr-objcopy -j .text -j .data -O ihex pwm.elf pwm.hex
+main.hex: main.elf
+	rm -f main.hex
+	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
