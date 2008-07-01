@@ -27,13 +27,13 @@
 
 /* includes */
 #include "config.h"
-#include "main.h"
 
 #include <avr/io.h>
 #include <stdint.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+#include "main.h"
 #include "pwm.h"
 
 /* TYPES AND PROTOTYPES */
@@ -107,7 +107,7 @@ inline void init_timer1(void)
 
     /* enable timer1 overflow (=output compare 1a)
      * and output compare 1b interrupt */
-    TIMSK |= _BV(OCIE1A) | _BV(OCIE1B);
+    _TIMSK_TIMER1 |= _BV(OCIE1A) | _BV(OCIE1B);
 
     /* set TOP for CTC mode */
     OCR1A = 64000;
@@ -293,7 +293,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
     /* decide if this interrupt is the beginning of a pwm cycle */
     if (pwm.next_bitmask == 0) {
         /* output initial values */
-        PORTD = pwm.initial_bitmask;
+        PORTB = pwm.initial_bitmask;
 
         /* if next timeslot would happen too fast or has already happened, just spinlock */
         while (TCNT1 + 500 > pwm.slots[pwm.index].top)
@@ -302,7 +302,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
             while (pwm.slots[pwm.index].top > TCNT1);
 
             /* output value */
-            PORTD |= pwm.slots[pwm.index].mask;
+            PORTB |= pwm.slots[pwm.index].mask;
 
             /* we can safely increment index here, since we are in the first timeslot and there
              * will always be at least one timeslot after this (middle) */
@@ -321,7 +321,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
 ISR(SIG_OUTPUT_COMPARE1B)
 /*{{{*/ {
     /* normal interrupt, output pre-calculated bitmask */
-    PORTD |= pwm.next_bitmask;
+    PORTB |= pwm.next_bitmask;
 
     /* and calculate the next timeslot */
     prepare_next_timeslot();

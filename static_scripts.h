@@ -32,10 +32,13 @@
 
 #if STATIC_SCRIPTS
 
-#include "common.h"
 #include <avr/io.h>
 #include <stdint.h>
 #include <avr/eeprom.h>
+
+/* macros for extracting low and high byte */
+#define LOW(x) (uint8_t)(0x00ff & (x))
+#define HIGH(x) (uint8_t)((0xff00 & (x)) >> 8)
 
 #define MAX_THREAD_STACK_DEPTH 3
 #define MAX_THREADS 3

@@ -31,7 +31,6 @@
 #if RC5_DECODER
 
 #include "rc5.h"
-#include "uart.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
