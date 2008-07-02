@@ -24,14 +24,14 @@ static const uint8_t testscript_flash2[] PROGMEM = {
     };
 
 
-static const uint8_t testscript_eeprom[] EEMEM = {
+/*static const uint8_t testscript_eeprom[] EEMEM = {
     MACRO_FADE_CHANNEL(CHANNEL_GREEN, 255, 0xf00),
     MACRO_WAIT(_BV(CHANNEL_GREEN)),
     MACRO_FADE_CHANNEL(CHANNEL_GREEN, 0, 0x100),
     MACRO_WAIT(_BV(CHANNEL_GREEN)),
     MACRO_JUMP(-4)
     };
-
+*/
 
 static const uint8_t colorchange_red[] PROGMEM = {
     MACRO_FADE_CHANNEL(CHANNEL_RED, 255, 0x200),

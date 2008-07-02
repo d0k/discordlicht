@@ -88,11 +88,14 @@ int main(void) {
 #if STATIC_SCRIPTS
     init_script_threads();
 
-    #if RS485_CTRL == 0
     /* start the example scripts */
-    //script_threads[0].handler.execute = &memory_handler_flash;
-    //script_threads[0].handler.position = (uint16_t) &colorchange_red;
-    //script_threads[0].flags.disabled = 0;
+    script_threads[0].handler.execute = &memory_handler_flash;
+    script_threads[0].handler.position = (uint16_t) &colorchange_red;
+    script_threads[0].flags.disabled = 1;
+
+	script_threads[1].handler.execute = &memory_handler_flash;
+    script_threads[1].handler.position = (uint16_t) &green_flash;
+    script_threads[1].flags.disabled = 1;
 
     //script_threads[1].handler.execute = &memory_handler_flash;
     //script_threads[1].handler.position = (uint16_t) &testscript_flash2;
@@ -102,10 +105,9 @@ int main(void) {
     //script_threads[2].handler.position = (uint16_t) &testscript_eeprom;
     //script_threads[2].flags.disabled = 0;
 
-    //script_threads[0].handler.execute = &memory_handler_flash;
-    //script_threads[0].handler.position = (uint16_t) &blinken;
-    //script_threads[0].flags.disabled = 0;
-    #endif
+    script_threads[2].handler.execute = &memory_handler_flash;
+    script_threads[2].handler.position = (uint16_t) &blinken;
+    script_threads[2].flags.disabled = 1;
 
 #endif
 
@@ -143,34 +145,46 @@ int main(void) {
             if (global_rc5.received_command.toggle_bit != toggle_bit) {
 
                 /* if code is 0x01 (key '1' on a default remote) */
-                /*if (global_rc5.received_command.code == 0x01) {
+                //if (global_rc5.received_command.code == 0x01) {
 
-                    /* install script into thread 1 *x/
-                    script_threads[1].handler.execute = &memory_handler_flash;
-                    script_threads[1].handler.position = (uint16_t) &green_flash;
-                    script_threads[1].flags.disabled = 0;
-                    script_threads[1].handler_stack_offset = 0;
+                    /* install script into thread 1 */
+                    //script_threads[1].handler.execute = &memory_handler_flash;
+                    //script_threads[1].handler.position = (uint16_t) &green_flash;
+                    //script_threads[1].flags.disabled = 0;
+                    //script_threads[1].handler_stack_offset = 0;
 
-                }*/
+                //}
 
 				switch (global_rc5.received_command.code) {
 				case 0x01:
-					global_pwm.channels[0].target_brightness += 10;
+					global_pwm.channels[0].target_brightness += 5;
 					break;
 				case 0x02:
-					global_pwm.channels[0].target_brightness -= 10;
+					global_pwm.channels[0].target_brightness -= 5;
 					break;
 				case 0x04:
-					global_pwm.channels[1].target_brightness += 10;
+					global_pwm.channels[1].target_brightness += 5;
 					break;
 				case 0x05:
-					global_pwm.channels[1].target_brightness -= 10;
+					global_pwm.channels[1].target_brightness -= 5;
 					break;
 				case 0x07:
-					global_pwm.channels[2].target_brightness += 10;
+					global_pwm.channels[2].target_brightness += 5;
 					break;
 				case 0x08:
-					global_pwm.channels[2].target_brightness -= 10;
+					global_pwm.channels[2].target_brightness -= 5;
+					break;
+				case 0x03:
+					script_threads[0].flags.disabled = !script_threads[0].flags.disabled;
+					script_threads[0].handler_stack_offset = 0;
+					break;
+				case 0x06:
+					script_threads[1].flags.disabled = !script_threads[1].flags.disabled;
+					script_threads[1].handler_stack_offset = 0;
+					break;
+				case 0x09:
+					script_threads[2].flags.disabled = !script_threads[2].flags.disabled;
+					script_threads[2].handler_stack_offset = 0;
 					break;
 				}
 
