@@ -75,16 +75,6 @@ int main(void) {
     init_rc5();
 #endif
 
-	global_pwm.channels[0].brightness = 255;
-    global_pwm.channels[0].target_brightness = 255;
-	global_pwm.channels[0].speed = 0x100;
- 	global_pwm.channels[1].brightness = 255;
-    global_pwm.channels[1].target_brightness = 255;
-	global_pwm.channels[2].speed = 0x100;
-    global_pwm.channels[2].brightness = 255;
-    global_pwm.channels[2].target_brightness = 255;
-	global_pwm.channels[2].speed = 0x100;
-
 #if STATIC_SCRIPTS
     init_script_threads();
 
@@ -93,7 +83,7 @@ int main(void) {
     script_threads[0].handler.position = (uint16_t) &colorchange_red;
     script_threads[0].flags.disabled = 1;
 
-	script_threads[1].handler.execute = &memory_handler_flash;
+    script_threads[1].handler.execute = &memory_handler_flash;
     script_threads[1].handler.position = (uint16_t) &green_flash;
     script_threads[1].flags.disabled = 1;
 
@@ -155,38 +145,44 @@ int main(void) {
 
                 //}
 
-				switch (global_rc5.received_command.code) {
-				case 0x01:
-					global_pwm.channels[0].target_brightness += 5;
-					break;
-				case 0x02:
-					global_pwm.channels[0].target_brightness -= 5;
-					break;
-				case 0x04:
-					global_pwm.channels[1].target_brightness += 5;
-					break;
-				case 0x05:
-					global_pwm.channels[1].target_brightness -= 5;
-					break;
-				case 0x07:
-					global_pwm.channels[2].target_brightness += 5;
-					break;
-				case 0x08:
-					global_pwm.channels[2].target_brightness -= 5;
-					break;
-				case 0x03:
-					script_threads[0].flags.disabled = !script_threads[0].flags.disabled;
-					script_threads[0].handler_stack_offset = 0;
-					break;
-				case 0x06:
-					script_threads[1].flags.disabled = !script_threads[1].flags.disabled;
-					script_threads[1].handler_stack_offset = 0;
-					break;
-				case 0x09:
-					script_threads[2].flags.disabled = !script_threads[2].flags.disabled;
-					script_threads[2].handler_stack_offset = 0;
-					break;
-				}
+                switch (global_rc5.received_command.code) {
+                case 0x01:
+                    global_pwm.channels[0].target_brightness += 5;
+                    break;
+                case 0x02:
+                    global_pwm.channels[0].target_brightness -= 5;
+                    break;
+                case 0x04:
+                    global_pwm.channels[1].target_brightness += 5;
+                    break;
+                case 0x05:
+                    global_pwm.channels[1].target_brightness -= 5;
+                    break;
+                case 0x07:
+                    global_pwm.channels[2].target_brightness += 5;
+                    break;
+                case 0x08:
+                    global_pwm.channels[2].target_brightness -= 5;
+                    break;
+                case 0x03:
+                    script_threads[0].handler.execute = &memory_handler_flash;
+                    script_threads[0].handler.position = (uint16_t) &colorchange_red;
+                    script_threads[0].flags.disabled = !script_threads[0].flags.disabled;
+                    script_threads[0].handler_stack_offset = 0;
+                    break;
+                case 0x06:
+                    script_threads[1].handler.execute = &memory_handler_flash;
+                    script_threads[1].handler.position = (uint16_t) &colorchange_red_blue    ;
+                    script_threads[1].flags.disabled = !script_threads[1].flags.disabled;
+                    script_threads[1].handler_stack_offset = 0;
+                    break;
+                case 0x09:
+                    script_threads[2].handler.execute = &memory_handler_flash;
+                    script_threads[2].handler.position = (uint16_t) &blinken;
+                    script_threads[2].flags.disabled = !script_threads[2].flags.disabled;
+                    script_threads[2].handler_stack_offset = 0;
+                    break;
+                }
 
                 /* store new toggle bit state */
                 toggle_bit = global_rc5.received_command.toggle_bit;
