@@ -211,10 +211,10 @@ void update_pwm_timeslots(void)
     pwm.next_bitmask = 0;
 
     /* calculate initial bitmask */
-    pwm.initial_bitmask = 0xff;
+    pwm.initial_bitmask = 0;
     for (i=0; i < PWM_CHANNELS; i++)
         if (global_pwm.channels[i].brightness > 0)
-            pwm.initial_bitmask &= ~global_pwm.channels[i].mask;
+            pwm.initial_bitmask |= global_pwm.channels[i].mask;
 } /*}}}*/
 
 /** fade any channels not already at their target brightness */
@@ -293,7 +293,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
     /* decide if this interrupt is the beginning of a pwm cycle */
     if (pwm.next_bitmask == 0) {
         /* output initial values */
-        PORTB = ~pwm.initial_bitmask;
+        PORTB = pwm.initial_bitmask;
 
         /* if next timeslot would happen too fast or has already happened, just spinlock */
         while (TCNT1 + 500 > pwm.slots[pwm.index].top)
