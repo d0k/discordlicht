@@ -57,8 +57,8 @@ static inline void init_output(void);
 
 /** init output channels */
 void init_output(void) { /* {{{ */
-    /* set all channels high -> leds off */
-    PORTB = _BV(PB0) | _BV(PB1) | _BV(PB2);
+    /* set all channels low -> leds off */
+    PORTB = 0;
     /* configure PB0-PB2 as outputs */
     DDRB = _BV(PB0) | _BV(PB1) | _BV(PB2);
 }
@@ -146,7 +146,7 @@ int main(void) {
                 //}
                 
                 for (uint8_t i = 0; i < 3; i++)
-                    global_pwm.channels[0].speed = 0x0100;
+                    global_pwm.channels[i].speed = 0x0100;
 
                 switch (global_rc5.received_command.code) {
                 case 0x01:
@@ -190,7 +190,7 @@ int main(void) {
                         global_pwm.channels[i].target_brightness = 0;
                         script_threads[i].flags.disabled = 1;
                     }
-                    break;                        
+                    break;
                 }
 
                 /* store new toggle bit state */
