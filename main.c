@@ -144,6 +144,9 @@ int main(void) {
                     //script_threads[1].handler_stack_offset = 0;
 
                 //}
+                
+                for (uint8_t i = 0; i < 3; i++)
+                    global_pwm.channels[0].speed = 0x0100;
 
                 switch (global_rc5.received_command.code) {
                 case 0x01:
@@ -182,6 +185,12 @@ int main(void) {
                     script_threads[2].flags.disabled = !script_threads[2].flags.disabled;
                     script_threads[2].handler_stack_offset = 0;
                     break;
+                case 0x00:
+                    for (uint8_t i = 0; i < 3; i++) {
+                        global_pwm.channels[i].target_brightness = 255;
+                        script_threads[i].flags.disabled = 1;
+                    }
+                    break;                        
                 }
 
                 /* store new toggle bit state */
