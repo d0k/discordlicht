@@ -293,7 +293,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
     /* decide if this interrupt is the beginning of a pwm cycle */
     if (pwm.next_bitmask == 0) {
         /* output initial values */
-        PORTB = pwm.initial_bitmask;
+        PORTB = ~pwm.initial_bitmask;
 
         /* if next timeslot would happen too fast or has already happened, just spinlock */
         while (TCNT1 + 500 > pwm.slots[pwm.index].top)
@@ -302,7 +302,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
             while (pwm.slots[pwm.index].top > TCNT1);
 
             /* output value */
-            PORTB |= pwm.slots[pwm.index].mask;
+            PORTB &= ~pwm.slots[pwm.index].mask;
 
             /* we can safely increment index here, since we are in the first timeslot and there
              * will always be at least one timeslot after this (middle) */
@@ -321,7 +321,7 @@ ISR(SIG_OUTPUT_COMPARE1A)
 ISR(SIG_OUTPUT_COMPARE1B)
 /*{{{*/ {
     /* normal interrupt, output pre-calculated bitmask */
-    PORTB |= pwm.next_bitmask;
+    PORTB &= ~pwm.next_bitmask;
 
     /* and calculate the next timeslot */
     prepare_next_timeslot();
