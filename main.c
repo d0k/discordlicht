@@ -187,7 +187,7 @@ int main(void) {
                     break;
                 case 0x00:
                     for (uint8_t i = 0; i < 3; i++) {
-                        global_pwm.channels[i].target_brightness = 255;
+                        global_pwm.channels[i].target_brightness = 0;
                         script_threads[i].flags.disabled = 1;
                     }
                     break;                        
