@@ -52,7 +52,6 @@
 volatile struct global_t global = {{0, 0}};
 
 /* prototypes */
-void (*jump_to_bootloader)(void) = (void *)0xc00;
 static inline void init_output(void);
 
 /** init output channels */
@@ -144,7 +143,7 @@ int main(void) {
                     //script_threads[1].handler_stack_offset = 0;
 
                 //}
-                
+
                 for (uint8_t i = 0; i < 3; i++)
                     global_pwm.channels[i].speed = 0x0100;
 
