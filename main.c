@@ -7,6 +7,7 @@
  *
  * (c) by Alexander Neumann <alexander@bumpern.de>
  *     Lars Noschinski <lars@public.noschinski.de>
+ *     Benjamin Kramer <benny.kra@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -144,7 +145,7 @@ int main(void) {
 
                 //}
 
-                for (uint8_t i = 0; i < 3; i++)
+                for (uint8_t i = 0; i < PWM_CHANNELS; i++)
                     global_pwm.channels[i].speed = 0x0100;
 
                 switch (global_rc5.received_command.code) {
@@ -185,7 +186,7 @@ int main(void) {
                     script_threads[2].handler_stack_offset = 0;
                     break;
                 case 0x00:
-                    for (uint8_t i = 0; i < 3; i++) {
+                    for (uint8_t i = 0; i < PWM_CHANNELS; i++) {
                         global_pwm.channels[i].target_brightness = 0;
                         script_threads[i].flags.disabled = 1;
                     }

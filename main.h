@@ -7,6 +7,7 @@
  *
  * (c) by Alexander Neumann <alexander@bumpern.de>
  *     Lars Noschinski <lars@public.noschinski.de>
+ *     Benjamin Kramer <benny.kra@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -24,6 +25,10 @@
  * For more information on the GPL, please go to:
  * http://www.gnu.org/copyleft/gpl.html
  }}} */
+
+#ifndef MAIN_H
+#define MAIN_H
+
 #include <stdint.h>
 
 /* global flag(=bit) structure */
@@ -41,3 +46,5 @@ struct global_t {
 };
 
 extern volatile struct global_t global;
+
+#endif

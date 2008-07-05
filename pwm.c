@@ -7,6 +7,7 @@
  *
  * (c) by Alexander Neumann <alexander@bumpern.de>
  *     Lars Noschinski <lars@public.noschinski.de>
+ *     Benjamin Kramer <benny.kra@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -125,7 +126,7 @@ inline void init_pwm(void)
 
     init_timer1();
 
-    for (i=0; i<3; i++) {
+    for (i=0; i<PWM_CHANNELS; i++) {
         global_pwm.channels[i].brightness = 0;
         global_pwm.channels[i].target_brightness = 0;
         global_pwm.channels[i].speed = 0x0100;

@@ -20,7 +20,7 @@ fuse:
 	$(AVRDUDE) $(FUSES)
 
 clean:
-	rm -f main.hex main.elf gammatable.h $(OBJECTS)
+	rm -f main.hex main.elf $(OBJECTS)
 
 # file targets:
 
