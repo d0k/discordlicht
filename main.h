@@ -48,3 +48,4 @@ struct global_t {
 extern volatile struct global_t global;
 
 #endif
+
